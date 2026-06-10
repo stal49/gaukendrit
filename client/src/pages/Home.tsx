@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowRight, Leaf, Users, Zap, Globe, TrendingUp, Heart } from "lucide-react";
 import { useState, useEffect } from "react";
+import Navbar from "@/components/Navbar";
 
 const ventureImages = [
   "/images/ven1.jpeg",
@@ -34,36 +35,20 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
-        <div className="container flex items-center justify-between py-4">
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
-              <Leaf className="w-6 h-6 text-primary-foreground" />
-            </div>
-            <span className="font-bold text-xl" style={{ fontFamily: "Playfair Display" }}>
-              Gaukendrit
-            </span>
-          </div>
-          <div className="hidden md:flex items-center gap-8">
-            <a href="#mission" className="text-sm hover:text-primary transition">
-              Mission
-            </a>
-            <a href="#rasgarbha" className="text-sm hover:text-primary transition">
-              RasGarbha
-            </a>
-            <a href="#entrepreneur" className="text-sm hover:text-primary transition">
-              Entrepreneur
-            </a>
-            <a href="#impact" className="text-sm hover:text-primary transition">
-              Impact
-            </a>
-            <a href="#invest" className="text-sm hover:text-primary transition">
-              Invest
-            </a>
-          </div>
-          <div className="hidden md:flex items-center gap-6">
-            <a href="tel:+919860798997" className="text-sm hover:text-primary transition flex items-center gap-1 font-semibold text-primary">
+      <Navbar
+        links={[
+          { href: "#mission", label: "Mission" },
+          { href: "#rasgarbha", label: "RasGarbha" },
+          { href: "#entrepreneur", label: "Entrepreneur" },
+          { href: "#impact", label: "Impact" },
+          { href: "#invest", label: "Invest" },
+        ]}
+        actions={
+          <>
+            <a
+              href="tel:+919860798997"
+              className="text-sm hover:text-primary transition flex items-center gap-1 font-semibold text-primary"
+            >
               📞 +91 98607 98997
             </a>
             <a href="/contact">
@@ -71,9 +56,9 @@ export default function Home() {
                 Contact <ArrowRight className="w-4 h-4" />
               </Button>
             </a>
-          </div>
-        </div>
-      </nav>
+          </>
+        }
+      />
 
       {/* Hero Section */}
       <section className="relative overflow-hidden pt-20 pb-32 bg-gradient-to-br from-background via-background to-accent/5">

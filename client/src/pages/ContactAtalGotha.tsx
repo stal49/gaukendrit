@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowRight, Leaf, Factory, Users, TrendingUp, Zap, MapPin } from "lucide-react";
 import { useState } from "react";
-import { Link } from "wouter";
+import Navbar from "@/components/Navbar";
 
 /**
  * Atal Gotha Factory Inquiry Page
@@ -27,9 +27,17 @@ export default function ContactAtalGotha() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Atal Gotha inquiry submitted:", formData);
+    try {
+      await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...formData, type: "atal-gotha" }),
+      });
+    } catch (err) {
+      console.error("Failed to submit form:", err);
+    }
     setSubmitted(true);
     setTimeout(() => {
       setFormData({ name: "", email: "", phone: "", village: "", message: "" });
@@ -39,24 +47,9 @@ export default function ContactAtalGotha() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
-        <div className="container flex items-center justify-between py-4">
-          <Link href="/">
-            <a className="flex items-center gap-2 hover:opacity-80 transition">
-              <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
-                <Leaf className="w-6 h-6 text-primary-foreground" />
-              </div>
-              <span className="font-bold text-xl" style={{ fontFamily: "Playfair Display" }}>
-                Gaukendrit
-              </span>
-            </a>
-          </Link>
-          <Link href="/contact">
-            <a className="text-sm hover:text-primary transition">← वापस संपर्क</a>
-          </Link>
-        </div>
-      </nav>
+      <Navbar
+        links={[{ href: "/contact", label: "← वापस संपर्क" }]}
+      />
 
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-background via-background to-accent/5">

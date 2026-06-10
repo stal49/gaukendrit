@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ArrowRight, Phone, Mail, MapPin, Clock, Users, TrendingUp, Leaf } from "lucide-react";
 import { useState } from "react";
 import { Link } from "wouter";
+import Navbar from "@/components/Navbar";
 
 /**
  * Contact Page - Design Philosophy: Organic Growth
@@ -27,9 +28,17 @@ export default function Contact() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    try {
+      await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...formData, type: formData.inquiryType }),
+      });
+    } catch (err) {
+      console.error("Failed to submit form:", err);
+    }
     setSubmitted(true);
     setTimeout(() => {
       setFormData({ name: "", email: "", phone: "", inquiryType: "general", message: "" });
@@ -39,41 +48,24 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
-        <div className="container flex items-center justify-between py-4">
-          <Link href="/">
-            <a className="flex items-center gap-2 hover:opacity-80 transition">
-              <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
-                <Leaf className="w-6 h-6 text-primary-foreground" />
-              </div>
-              <span className="font-bold text-xl" style={{ fontFamily: "Playfair Display" }}>
-                Gaukendrit
-              </span>
-            </a>
-          </Link>
-          <div className="hidden md:flex items-center gap-8">
-            <Link href="/">
-              <a className="text-sm hover:text-primary transition">Home</a>
-            </Link>
-            <a href="/#mission" className="text-sm hover:text-primary transition">
-              Mission
-            </a>
-            <a href="tel:+919860798997" className="text-sm hover:text-primary transition">
-              Call Us
-            </a>
-          </div>
+      <Navbar
+        links={[
+          { href: "/", label: "Home" },
+          { href: "/#mission", label: "Mission" },
+          { href: "tel:+919860798997", label: "Call Us" },
+        ]}
+        actions={
           <a
             href="https://wa.me/919860798997"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden md:flex gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition"
+            className="flex gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition"
             style={{ fontFamily: "Poppins" }}
           >
             WhatsApp
           </a>
-        </div>
-      </nav>
+        }
+      />
 
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-background via-background to-accent/5">

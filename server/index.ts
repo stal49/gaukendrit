@@ -2,6 +2,7 @@ import express from "express";
 import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
+import { sendContactEmail } from "./lib/email";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -9,6 +10,20 @@ const __dirname = path.dirname(__filename);
 async function startServer() {
   const app = express();
   const server = createServer(app);
+
+  app.use(express.json());
+
+  // Contact form API endpoint
+  app.post("/api/contact", async (req, res) => {
+    try {
+      const { type, ...fields } = req.body;
+      await sendContactEmail({ type: type || "general", fields });
+      res.json({ success: true });
+    } catch (err) {
+      console.error("[api/contact] Error:", err);
+      res.status(500).json({ success: false, message: "Failed to send inquiry" });
+    }
+  });
 
   // Serve static files from dist/public in production
   const staticPath =
