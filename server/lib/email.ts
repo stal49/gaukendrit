@@ -89,16 +89,13 @@ export async function sendContactEmail({
   fields: Record<string, string>;
 }) {
   if (!resend) {
-    console.log("[email] Resend not configured, skipping email send");
-    return;
+    throw new Error("Email service (Resend) not configured");
   }
   if (!resendFromEmail) {
-    console.log("[email] RESEND_FROM_EMAIL not set, skipping email send");
-    return;
+    throw new Error("RESEND_FROM_EMAIL not configured");
   }
   if (!notificationEmail) {
-    console.log("[email] NOTIFICATION_EMAIL not set, skipping email send");
-    return;
+    throw new Error("NOTIFICATION_EMAIL not configured");
   }
 
   const label = typeLabels[type] || "Contact Form Submission";
@@ -118,8 +115,8 @@ export async function sendContactEmail({
   );
 
   if (error) {
-    console.error("[email] Failed to send:", error);
-  } else {
-    console.log("[email] Sent successfully:", data?.id);
+    throw new Error(`Failed to send email: ${error.message}`);
   }
+
+  console.log("[email] Sent successfully:", data?.id);
 }

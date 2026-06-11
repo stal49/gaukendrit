@@ -31,19 +31,20 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await fetch("/api/contact", {
+      const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...formData, type: formData.inquiryType }),
       });
+      if (!res.ok) throw new Error("Failed to send inquiry");
+      setSubmitted(true);
+      setTimeout(() => {
+        setFormData({ name: "", email: "", phone: "", inquiryType: "general", message: "" });
+        setSubmitted(false);
+      }, 3000);
     } catch (err) {
       console.error("Failed to submit form:", err);
     }
-    setSubmitted(true);
-    setTimeout(() => {
-      setFormData({ name: "", email: "", phone: "", inquiryType: "general", message: "" });
-      setSubmitted(false);
-    }, 3000);
   };
 
   return (
