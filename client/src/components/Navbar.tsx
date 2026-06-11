@@ -64,7 +64,7 @@ export default function Navbar({ links, actions }: NavbarProps) {
               <Menu className="w-5 h-5" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="w-72">
+          <SheetContent side="right" className="w-72 p-6 pt-10">
             <div className="flex flex-col gap-6 mt-8">
               {mobileLinkElements}
               <div className="flex flex-col gap-3 pt-4 border-t border-border">
